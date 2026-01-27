@@ -1,0 +1,11 @@
+# ML models
+*.pkl
+*.joblib
+
+# Django
+db.sqlite3
+__pycache__/
+*.pyc
+
+# Virtual env
+venv/
