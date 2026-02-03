@@ -26,6 +26,6 @@ class StudentPerformanceSerializer(serializers.ModelSerializer):
     def validate_sample_papers(self, value):
         if value < 0:
             raise serializers.ValidationError("Sample papers practiced cannot be negative.")
-        if value > 50:
-            raise serializers.ValidationError("Practicing more than 50 sample papers is highly unusual.")
+        if value > 20:
+            raise serializers.ValidationError("Practicing more than 20 sample papers is highly unusual.")
         return value
