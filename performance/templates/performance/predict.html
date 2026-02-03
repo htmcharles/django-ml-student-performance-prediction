@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Performance Prediction</title>
+</head>
+<body>
+    <h1>Student Performance Predictor</h1>
+
+    {% if error %}
+        <div style="color: red;">
+            <strong>{{ error }}</strong>
+            <ul>
+                {% for field, messages in details.items %}
+                    <li>{{ field }}: {{ messages|join:", " }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    {% if prediction %}
+        <div style="color: green; border: 1px solid green; padding: 10px;">
+            <h2>Predicted Performance Index: {{ prediction }}</h2>
+        </div>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            <label>Hours Studied:</label><br>
+            <input type="number" name="hours_studied" value="{{ data.hours_studied|default:'' }}" required>
+        </div>
+        <br>
+        <div>
+            <label>Previous Scores:</label><br>
+            <input type="number" name="previous_scores" value="{{ data.previous_scores|default:'' }}" required>
+        </div>
+        <br>
+        <div>
+            <label>Extracurricular Activities:</label><br>
+            <select name="extracurricular">
+                <option value="true" {% if data.extracurricular == 'true' or data.extracurricular == True %}selected{% endif %}>Yes</option>
+                <option value="false" {% if data.extracurricular == 'false' or data.extracurricular == False %}selected{% endif %}>No</option>
+            </select>
+        </div>
+        <br>
+        <div>
+            <label>Sleep Hours:</label><br>
+            <input type="number" name="sleep_hours" value="{{ data.sleep_hours|default:'' }}" required>
+        </div>
+        <br>
+        <div>
+            <label>Sample Papers Practiced:</label><br>
+            <input type="number" name="sample_papers" value="{{ data.sample_papers|default:'' }}" required>
+        </div>
+        <br>
+        <button type="submit">Predict Performance</button>
+    </form>
+</body>
+</html>
