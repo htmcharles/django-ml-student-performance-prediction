@@ -5,13 +5,23 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.conf import settings
 
+from .serializers import StudentPerformanceSerializer
+from rest_framework import status
+
 MODEL_PATH = os.path.join(settings.BASE_DIR, 'performance', 'model.pkl')
 
 @api_view(['POST'])
 def predict_performance(request):
-    model = joblib.load(MODEL_PATH)   # load ONLY when API is called
+    serializer = StudentPerformanceSerializer(data=request.data)
+    
+    if not serializer.is_valid():
+        return Response({
+            "error": "Input abnormality detected",
+            "details": serializer.errors
+        }, status=status.HTTP_400_BAD_REQUEST)
 
-    data = request.data
+    model = joblib.load(MODEL_PATH)
+    data = serializer.validated_data
 
     features = np.array([[
         data['hours_studied'],
