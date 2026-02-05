@@ -31,11 +31,6 @@
             <h2>{{ prediction }}</h2>
         </div>
         {% endif %}
-
-        <div id="consumption-indicator" class="consumption-indicator">
-            Time Consumed: <b id="total-hours">0</b>h / 24h
-        </div>
-
         <form method="post" id="predict-form">
             {% csrf_token %}
             <div class="form-group">
