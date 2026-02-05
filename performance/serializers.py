@@ -29,3 +29,8 @@ class StudentPerformanceSerializer(serializers.ModelSerializer):
         if value > 20:
             raise serializers.ValidationError("Practicing more than 20 sample papers is highly unusual.")
         return value
+
+    def validate_time_paladox(self, value):
+        if value < 0 or value > 24:
+            raise serializers.ValidationError("Time paradox value must be between 0 and 24 hours.")
+        return value
