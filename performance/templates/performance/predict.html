@@ -1,60 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Performance Prediction</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'performance/css/style.css' %}">
 </head>
-<body>
-    <h1>Student Performance Predictor</h1>
 
-    {% if error %}
-        <div style="color: red;">
+<body>
+    <div class="container">
+        <h1>Predictor</h1>
+        <p class="subtitle">AI-powered student performance insights</p>
+
+        {% if error %}
+        <div class="alert alert-error">
             <strong>{{ error }}</strong>
             <ul>
                 {% for field, messages in details.items %}
-                    <li>{{ field }}: {{ messages|join:", " }}</li>
+                <li>{{ field|title }}: {{ messages|join:", " }}</li>
                 {% endfor %}
             </ul>
         </div>
-    {% endif %}
+        {% endif %}
 
-    {% if prediction %}
-        <div style="color: green; border: 1px solid green; padding: 10px;">
-            <h2>Predicted Performance Index: {{ prediction }}</h2>
+        {% if prediction %}
+        <div class="alert alert-success">
+            <p>Predicted Performance Index</p>
+            <h2>{{ prediction }}</h2>
         </div>
-    {% endif %}
+        {% endif %}
 
-    <form method="post">
-        {% csrf_token %}
-        <div>
-            <label>Hours Studied:</label><br>
-            <input type="number" name="hours_studied" value="{{ data.hours_studied|default:'' }}" required>
-        </div>
-        <br>
-        <div>
-            <label>Previous Scores:</label><br>
-            <input type="number" name="previous_scores" value="{{ data.previous_scores|default:'' }}" required>
-        </div>
-        <br>
-        <div>
-            <label>Extracurricular Activities:</label><br>
-            <select name="extracurricular">
-                <option value="true" {% if data.extracurricular == 'true' or data.extracurricular == True %}selected{% endif %}>Yes</option>
-                <option value="false" {% if data.extracurricular == 'false' or data.extracurricular == False %}selected{% endif %}>No</option>
-            </select>
-        </div>
-        <br>
-        <div>
-            <label>Sleep Hours:</label><br>
-            <input type="number" name="sleep_hours" value="{{ data.sleep_hours|default:'' }}" required>
-        </div>
-        <br>
-        <div>
-            <label>Sample Papers Practiced:</label><br>
-            <input type="number" name="sample_papers" value="{{ data.sample_papers|default:'' }}" required>
-        </div>
-        <br>
-        <button type="submit">Predict Performance</button>
-    </form>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="hours_studied">Hours Studied</label>
+                <input type="number" id="hours_studied" name="hours_studied" value="{{ data.hours_studied|default:'' }}"
+                    placeholder="e.g. 5" required>
+            </div>
+
+            <div class="form-group">
+                <label for="previous_scores">Previous Scores</label>
+                <input type="number" id="previous_scores" name="previous_scores"
+                    value="{{ data.previous_scores|default:'' }}" placeholder="e.g. 85" required>
+            </div>
+
+            <div class="form-group">
+                <label for="extracurricular">Extracurricular Activities</label>
+                <select id="extracurricular" name="extracurricular">
+    <option value="true" {% if data.extracurricular %}selected{% endif %}>Yes</option>
+    <option value="false" {% if not data.extracurricular %}selected{% endif %}>No</option>
+</select>
+
+            </div>
+
+            <div class="form-group">
+                <label for="sleep_hours">Sleep Hours</label>
+                <input type="number" id="sleep_hours" name="sleep_hours" value="{{ data.sleep_hours|default:'' }}"
+                    placeholder="e.g. 8" required>
+            </div>
+
+            <div class="form-group">
+                <label for="sample_papers">Sample Papers Practiced</label>
+                <input type="number" id="sample_papers" name="sample_papers" value="{{ data.sample_papers|default:'' }}"
+                    placeholder="e.g. 3" required>
+            </div>
+
+            <button type="submit">Predict Performance</button>
+        </form>
+    </div>
 </body>
+
 </html>
