@@ -32,7 +32,11 @@
         </div>
         {% endif %}
 
-        <form method="post">
+        <div id="consumption-indicator" class="consumption-indicator">
+            Time Consumed: <b id="total-hours">0</b>h / 24h
+        </div>
+
+        <form method="post" id="predict-form">
             {% csrf_token %}
             <div class="form-group">
                 <label for="hours_studied">Hours Studied</label>
@@ -49,9 +53,9 @@
             <div class="form-group">
                 <label for="extracurricular">Extracurricular Activities</label>
                 <select id="extracurricular" name="extracurricular">
-    <option value="true" {% if data.extracurricular %}selected{% endif %}>Yes</option>
-    <option value="false" {% if not data.extracurricular %}selected{% endif %}>No</option>
-</select>
+                    <option value="true" {% if data.extracurricular %}selected{% endif %}>Yes</option>
+                    <option value="false" {% if not data.extracurricular %}selected{% endif %}>No</option>
+                </select>
 
             </div>
 
@@ -67,9 +71,40 @@
                     placeholder="e.g. 3" required>
             </div>
 
-            <button type="submit">Predict Performance</button>
+            <button type="submit" id="submit-btn">Predict Performance</button>
         </form>
     </div>
+
+    <script>
+        const hoursStudied = document.getElementById('hours_studied');
+        const sleepHours = document.getElementById('sleep_hours');
+        const totalHoursDisplay = document.getElementById('total-hours');
+        const indicator = document.getElementById('consumption-indicator');
+        const submitBtn = document.getElementById('submit-btn');
+
+        function updateConsumption() {
+            const total = (parseInt(hoursStudied.value) || 0) + (parseInt(sleepHours.value) || 0);
+            totalHoursDisplay.textContent = total;
+
+            if (total > 24) {
+                indicator.classList.add('paradox');
+                hoursStudied.classList.add('paradox-input');
+                sleepHours.classList.add('paradox-input');
+                submitBtn.textContent = '❌ TIME PARADOX DETECTED';
+                submitBtn.style.background = 'var(--error-text)';
+            } else {
+                indicator.classList.remove('paradox');
+                hoursStudied.classList.remove('paradox-input');
+                sleepHours.classList.remove('paradox-input');
+                submitBtn.textContent = 'Predict Performance';
+                submitBtn.style.background = 'var(--primary)';
+            }
+        }
+
+        hoursStudied.addEventListener('input', updateConsumption);
+        sleepHours.addEventListener('input', updateConsumption);
+        updateConsumption();
+    </script>
 </body>
 
 </html>

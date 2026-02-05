@@ -30,7 +30,12 @@ class StudentPerformanceSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Practicing more than 20 sample papers is highly unusual.")
         return value
 
-    def validate_time_paladox(self, value):
-        if value < 0 or value > 24:
-            raise serializers.ValidationError("Time paradox value must be between 0 and 24 hours.")
-        return value
+    def validate(self, data):
+        hours_studied = data.get('hours_studied', 0)
+        sleep_hours = data.get('sleep_hours', 0)
+        
+        if hours_studied + sleep_hours > 24:
+            raise serializers.ValidationError({
+                "non_field_errors": ["TIME PARADOX: You cannot study and sleep for more than 24 hours. Reality is breaking!"]
+            })
+        return data
