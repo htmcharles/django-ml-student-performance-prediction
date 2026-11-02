@@ -11,3 +11,4 @@ __pycache__/
 venv/
 config.bat
 node_modules
+.vscode/tasks.json
